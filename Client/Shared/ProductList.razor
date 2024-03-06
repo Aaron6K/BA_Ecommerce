@@ -1,17 +1,23 @@
-﻿ @using BlazorEcommerce.Shared
- @inject HttpClient Http
+﻿ @inject IProductService ProductService;
 <h3>ProductList</h3>
-<ul class="list-unstyled">
-   @foreach (var product in products)
+@if(ProductService.Products ==null || ProductService.Products.Count == 0)
+{
+   <span>Loading Products</span>
+}
+else{
+  <ul class="list-unstyled">
+      @foreach (var product in ProductService.Products)
    {
       <li class="media my-3">
          <div class="media-img-wrapper mr-2">
-            <a href="#">
+            <a href="/product/@product.Id">
                <img class="media-img" src="@product.ImageUrl" alt="@product.Title" />
             </a>
          </div>
          <div class="media-body">
-            <a href="#"><h4 class="mb-0">@product.Title</h4></a>
+            <a href="/product/@product.Id">
+               <h4 class="mb-0">@product.Title</h4>
+            </a>
             <p>@product.Description</p>
             <h5 class="price">
                $@product.Price
@@ -20,15 +26,16 @@
       </li>
    }
 </ul>
-
+}
 @code {
-   private static List<Product> products = new List<Product>();
+   // private static List<Product> products = new List<Product>();
    protected override async Task OnInitializedAsync()
    {
-      var results = await Http.GetFromJsonAsync<List<Product>>("api/Product");
-      if (results != null)
-      {
-         products = results;
-      }
+      //var results = await Http.GetFromJsonAsync<List<Product>>("api/Product");
+      //if (results != null)
+      // {
+      //   products = results;
+      // }
+      await ProductService.GetProducts();
    }
 }
