@@ -2,6 +2,7 @@ global using BA_Ecommerce.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using BA_Ecommerce.Server.Data;
 global using BA_Ecommerce.Server.Services.ProductService;
+global using BA_Ecommerce.Server.Services.CategoryService;
 
 using Microsoft.AspNetCore.ResponseCompression;
 
@@ -22,7 +23,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddScoped<IProductService, ProductService>();
-
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();

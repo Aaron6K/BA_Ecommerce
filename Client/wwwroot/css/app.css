@@ -96,10 +96,20 @@ a, .btn-link {
     inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
 }
 
-    .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Loading");
-    }
 
-    .price {
-        color:green;
-    }
+.loading-progress-text:after {
+    content: var(--blazor-load-percentage-text, "Loading");
+}
+
+.price {
+    color:green;
+}
+
+.media {
+    display: flex;
+    align-items: flex-start;
+}
+
+media-body {
+    flex: 1;
+}

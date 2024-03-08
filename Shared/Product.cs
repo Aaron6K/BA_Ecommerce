@@ -14,7 +14,12 @@ namespace BA_Ecommerce.Shared
       public string Description { get; set; } = string.Empty;
       public string ImageUrl { get; set; } = string.Empty;
       [Column(TypeName="decimal(18,2)")]
-      public decimal Price { get; set; } = decimal.MinValue;
+     // public decimal Price { get; set; } = decimal.MinValue;
+      public Category? Category { get; set; }
+      public int CategoryId { get; set; }
+      //not nessary it works out relationship
+
+      public List<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
 
     }
 }
