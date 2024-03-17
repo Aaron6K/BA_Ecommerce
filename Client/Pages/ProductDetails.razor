@@ -3,7 +3,7 @@
 
 @if (product == null)
 {
-   <span>Loading Product .....</span>
+   <span>@message .....</span>
 }
 else
 {
@@ -14,20 +14,60 @@ else
       <div class="media-body">
          <h2 class="mb-0">@product.Title</h2>
          <p>@product.Description</p>
-         <h4 class="price">
-            $@product.Price
-         </h4>
+         @if(product.Variants!=null && product.Variants.Count > 1)
+         {
+            @*https://www.syncfusion.com/faq/blazor/webassembly/how-can-i-bind-a-drop-down-list-in-blazor-webassembly*@
+            <div class="mb-3">
+               <select class="form-select" @bind="@currentTypeId">
+                  @foreach(var variant in product.Variants)
+                  {
+                     <option value="@variant.ProductTypeId">@variant.ProductType.Name</option>
+                  }
+               </select>
+            </div>
+         }
+         @if (GetSelectedVariant()!=null ){
+            @if (GetSelectedVariant().OriginalPrice > GetSelectedVariant().Price)
+            {
+            <h6 class="text-muted orginal-price">
+                  @GetSelectedVariant().OriginalPrice
+               </h6>
+            }
+            <h4>  @GetSelectedVariant().Price</h4>
+         }
       </div>
    </div>
 }
 @code {
    private Product? product = null;
+   private string message;
+   private int currentTypeId = 1;
 
    [Parameter]
    public int Id { get; set; }
 
    protected override async Task OnParametersSetAsync()
    {
-      product = productService.Products.Find(p => p.Id == Id);
+      message = "Loading.. ";
+      //product =   productService.Products.Find(p => p.Id == Id);
+      var result= await productService.GetProduct(Id);
+      if (!result.Success)
+      {
+         message = result.Message;
+      }
+      else
+      {
+         product = result.Data;
+         if (product!.Variants.Count > 0)
+         {
+            currentTypeId = product.Variants[0].ProductTypeId;
+         }
+      }
    }
+   private ProductVariant GetSelectedVariant()
+   {
+      var variant = product.Variants.FirstOrDefault(a => a.ProductTypeId == currentTypeId);
+      return variant;
+   }
+
 }

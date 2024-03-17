@@ -5,6 +5,10 @@
      margin:0 10px 10px 10px;
  }
 
+ .orginal-price{
+     text-decoration:line-through;
+ }
+
  .media-img-wrapper{
      max-width:500px;
      max-height:500px;
