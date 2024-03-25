@@ -1,7 +1,5 @@
 ﻿@inject IProductService ProductService
 @implements IDisposable
-
-
 <center><h2>Top Products of Today</h2></center>
 @if (ProductService.Products==null || ProductService.Products.Count == 0)
 {
@@ -24,7 +22,6 @@ else
                   <h5 class="price">
                      $@product.Variants[0].Price
                   </h5>
-                    
                }
             </div>
          }

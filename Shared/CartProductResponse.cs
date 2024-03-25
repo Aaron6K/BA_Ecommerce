@@ -11,10 +11,15 @@ namespace BA_Ecommerce.Shared
    {
       public int ProductId { get; set; }
       public string Title { get; set; } = "";
+
+
       public int ProductTypeId { get; set; }
+      public string ProductType { get; set; } = string.Empty;
       public string Name { get; set; } = "";
       public string ImageUrl { get; set; } = "";
       public decimal Price { get; set; }
 
-    }
+      public int Quantity { get; set; } = 1;
+
+   }
 }

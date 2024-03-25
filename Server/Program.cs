@@ -6,6 +6,7 @@ global using BA_Ecommerce.Server.Services.CategoryService;
 
 using Microsoft.AspNetCore.ResponseCompression;
 using BA_Ecommerce.Server.Services.CartService;
+using BA_Ecommerce.Server.Services.AuthService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 var app = builder.Build();

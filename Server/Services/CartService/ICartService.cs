@@ -2,6 +2,6 @@
 {
    public interface ICartService
    {
-      Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<CartItem> cartItems);
+      public Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<CartItem> cartItems);
    }
 }

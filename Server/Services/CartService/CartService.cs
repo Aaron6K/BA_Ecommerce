@@ -8,18 +8,47 @@ namespace BA_Ecommerce.Server.Services.CartService
          _context = context;
       }
 
-      public Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<CartItem> cartItems)
+      public async Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<CartItem> cartItems)
       {
          var result= new ServiceResponse<List<CartProductResponse>>()
          {
             Data= new List<CartProductResponse>()
          };
 
+         foreach (var cartItem in cartItems) { 
+            var product=await _context.Products.Where(a=>a.Id==cartItem.ProductId).FirstOrDefaultAsync();
+            if(product==null)
+            {
+               continue;
+            }
 
-         foreach (var cartItem in cartItems) { }
+            var productVariant=await _context.ProductVariants.Where(
+               v=>
+               v.ProductId==cartItem.ProductId && 
+               v.ProductTypeId==cartItem.ProductTypeId).
+               Include(v=>v.ProductType).FirstOrDefaultAsync();
 
-         return Task.FromResult(result);
 
+            if(productVariant==null)
+            {
+               continue;
+            }
+
+            var cartProduct = new CartProductResponse()
+            {
+               ProductId = product.Id,
+               Title=product.Title,
+               ProductTypeId = productVariant.ProductTypeId, 
+               ProductType= productVariant.ProductType.Name,
+               ImageUrl =product.ImageUrl,
+               Price=productVariant.Price,
+               Quantity= cartItem.Quantity
+
+            };
+            result.Data.Add(cartProduct);
+         }
+
+         return result;
       }
    }
 }
