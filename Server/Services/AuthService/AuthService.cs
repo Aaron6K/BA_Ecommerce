@@ -1,4 +1,5 @@
 ﻿
+using BA_Ecommerce.Shared;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -69,6 +70,7 @@ namespace BA_Ecommerce.Server.Services.AuthService
 
          user.PasswordHash = passwordHash;
          user.PasswordSalt = passwordSalt;
+
          _context.Users.Add(user);
 
          await _context.SaveChangesAsync();
@@ -95,25 +97,46 @@ namespace BA_Ecommerce.Server.Services.AuthService
 
       public string CreateToken(User user)
       {
-         List<Claim> claims = new List<Claim>()
-         {
-            new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-            new Claim(ClaimTypes.Name,user.Email)
-      
-         };
+         List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Email) 
+                
+            };
 
+         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+             .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
-         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-         var cred= new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+         var token = new JwtSecurityToken(
+                 claims: claims,
+                 expires: DateTime.Now.AddDays(1),
+                 signingCredentials: creds);
 
-         var token= new JwtSecurityToken(claims:claims, expires:DateTime.Now.AddDays(1),signingCredentials: cred);
-
-         var jwt= new JwtSecurityTokenHandler().WriteToken(token);
+         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
          return jwt;
       }
-       
 
+      public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword)
+      {  
+         var user= await _context.Users.FindAsync(userId);
+         if(user == null)
+         {
+            return new ServiceResponse<bool> { 
+               Success = false,
+               Message = "User not found" };
+         }
+         CreateHashPassword(newPassword,out byte[] passwordhash, out byte[] salt);
+
+         user.PasswordHash = passwordhash;
+         user.PasswordSalt = salt;
+
+         await _context.SaveChangesAsync();
+
+         return new ServiceResponse<bool> { Success = true, Message = "", Data = true };
+
+      }
    }
 }

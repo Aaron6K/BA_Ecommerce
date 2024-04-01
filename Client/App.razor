@@ -2,7 +2,14 @@
    <Router AppAssembly="@typeof(App).Assembly">
       <Found Context="routeData">
         @*  <RouteView RouteData="@routeData" DefaultLayout="@typeof(ShopLayout)" /> *@
-         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(ShopLayout)" />
+         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(ShopLayout)">
+            <NotAuthorized>
+               <h3>You are not allowed to view this page!</h3>
+
+               <h5>Please  <a href="login" >Login</a></h5>
+               <h5>Please  <a href="register">Register</a></h5>
+            </NotAuthorized>
+         </AuthorizeRouteView>
          <FocusOnNavigate RouteData="@routeData" Selector="h1" />
       </Found>
       <NotFound>
