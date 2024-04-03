@@ -6,11 +6,13 @@
       Task<ServiceResponse<List<CartProductResponse>>> StoreCartItems(List<CartItem> cartItems);
 
       Task<ServiceResponse<int>> GetCartItemsCount();
+
       Task<ServiceResponse<List<CartProductResponse>>> GetDBCartProducts();
 
       Task<ServiceResponse<bool>> AddToCart(CartItem cartItem);
       Task<ServiceResponse<bool>> UpdateQuantity(CartItem cartItem);
 
+ 
       Task<ServiceResponse<bool>> RemoveCartItem(int productId, int productTypeId);
    }
 }

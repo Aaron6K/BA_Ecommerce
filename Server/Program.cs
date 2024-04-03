@@ -3,13 +3,15 @@ global using Microsoft.EntityFrameworkCore;
 global using BA_Ecommerce.Server.Data;
 global using BA_Ecommerce.Server.Services.ProductService;
 global using BA_Ecommerce.Server.Services.CategoryService;
+global using BA_Ecommerce.Server.Services.OrderService;
 
-using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.ResponseCompression; 
 using BA_Ecommerce.Server.Services.CartService;
 using BA_Ecommerce.Server.Services.AuthService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +33,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IOrderService,OrderService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
    .AddJwtBearer(options =>
    {

@@ -13,8 +13,11 @@
        <AuthorizeView>
           <Authorized>
             <a href="profile" class="dropdown-item">Profile
+                  Profile
                <hr />
             </a>
+            <a href="orders" class="dropdown-item">Order(s)</a>
+
             <button @onclick="Logout" href="login" class="dropdown-item">Logout</button>
           </Authorized>
           <NotAuthorized>

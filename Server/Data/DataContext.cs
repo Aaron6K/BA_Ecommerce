@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BA_Ecommerce.Server.Data
 {
@@ -13,6 +14,7 @@ namespace BA_Ecommerce.Server.Data
 
          modelBuilder.Entity<CartItem>().HasKey(ci => new { ci.ProductId,ci.ProductTypeId ,ci.UserId});
 
+         modelBuilder.Entity<OrderItem>().HasKey(oi => new { oi.OrderId, oi.ProductId, oi.ProductTypeId });
 
          modelBuilder.Entity<Product>().HasData(
             new Product
@@ -276,8 +278,8 @@ namespace BA_Ecommerce.Server.Data
       public DbSet <ProductType> ProductTypes { get; set; }
       public DbSet<ProductVariant> ProductVariants { get; set; }
       public DbSet <User> Users { get; set; }
-
       public DbSet<CartItem> CartItems { get; set; }
-
-   }
+      public DbSet<Order> Orders { get; set; }
+      public DbSet<OrderItem> OrderItem { get; set; }
+    }
 }
