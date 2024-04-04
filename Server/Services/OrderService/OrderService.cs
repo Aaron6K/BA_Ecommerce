@@ -27,6 +27,53 @@ namespace BA_Ecommerce.Server.Services.OrderService
 
       }
 
+      public async Task<ServiceResponse<OrderDetailsResponse>> GetOrderDetails(int orderId)
+      {
+         var userId= _authService.GetUserId();
+
+         var response= new ServiceResponse<OrderDetailsResponse>();
+         var order= await _dataContext.Orders.
+                        Include(o=> o.OrderItems).
+                        ThenInclude(o=>o.Product).
+                        Include(a=>a.OrderItems).
+                        ThenInclude(a=>a.ProductType).
+                        Where(a=>a.UserId==userId).OrderByDescending(a=>a.OrderDate)
+                        .FirstOrDefaultAsync();
+
+            if(order==null) { 
+               response.Success = false;
+               response.Message = "Order not found";
+               return response;
+            }
+            var orderDetailsResponse = new OrderDetailsResponse()
+            {
+               OrderDate = order.OrderDate,
+               TotalPrice = order.TotalPrice,
+               Products = new List<OrderDetailsProductResponse>()
+            };
+
+
+            foreach (var item in order.OrderItems)
+            {
+               orderDetailsResponse.Products.Add(new OrderDetailsProductResponse
+               {
+                  ProductId = item.ProductId,
+                  ImageUrl=item.Product.ImageUrl,
+                  ProductType=item.ProductType.Name,
+                  Quantity=item.Qunatity,
+                  Title=item.Product.Title ,
+                  TotalPrice=item.TotalPrice
+               });
+            }
+
+
+
+         response.Data = orderDetailsResponse;
+
+
+         return response;
+      }
+
       public async Task<ServiceResponse<List<OrderOverviewResponse>>> GetOrders()
       {
          var userId=_authService.GetUserId();
@@ -96,5 +143,8 @@ namespace BA_Ecommerce.Server.Services.OrderService
          return new ServiceResponse<bool> { Data = true };
 
       }
+
+     
+       
    }
 }

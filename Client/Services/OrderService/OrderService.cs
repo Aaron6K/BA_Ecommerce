@@ -49,5 +49,12 @@ namespace BA_Ecommerce.Client.Services.OrderService
             return  new List<OrderOverviewResponse>();
          }
       }
+
+      public async Task<OrderDetailsResponse> GetOrderDetails(int orderId)
+      {
+         var response = await _http.GetFromJsonAsync<ServiceResponse<OrderDetailsResponse>>($"api/order/{orderId}");
+         
+         return response.Data;
+      }
    }
 }

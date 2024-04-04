@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BA_Ecommerce.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BA_Ecommerce.Server.Controllers
@@ -26,6 +27,12 @@ namespace BA_Ecommerce.Server.Controllers
          var result=await _orderService.GetOrders();
          return Ok(result);
 
+      }
+      [HttpGet("{orderId}")]
+      public async Task<ActionResult<ServiceResponse<OrderDetailsResponse>>> GetOrderDetails(int orderId)
+      {
+         var result=await _orderService.GetOrderDetails(orderId);
+         return Ok(result);
       }
 
    }
